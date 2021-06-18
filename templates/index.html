@@ -1,0 +1,123 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}Video Searcher{% endblock %}
+{% block head %}
+{{super()}}
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+<!-- Latest compiled and minified JavaScript -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
+<script type="text/javascript">// <![CDATA[
+    function loading(){
+        $("#loading").show();
+        $("#content").hide();       
+    }
+
+// ]]></script>
+{% endblock %}
+{% block body %}
+{{super()}}
+{% endblock %}
+{% block navbar %}
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="#"> Video Searcher</a>
+</nav>
+{% endblock %}
+
+
+
+
+{% block content %}
+{{super()}}
+
+<div class="row text-center">
+<div class="jumbotron">
+    <h1>Welcome to Our VGG16 Searcher</h1>
+    <p>Welcome to our VGG16 based video searcher Upload a video less than 10MB and search for items in it</p>
+    <!-- <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p> -->
+  </div>
+</div>
+
+
+
+
+
+
+
+<div class="container text-center">
+
+
+{% if uploaded == False %}
+	<div class="row" id="content">
+	      <form method="POST" action="http://localhost:5000/uploader" enctype = "multipart/form-data">  
+              <div class="form-group files">
+                <label>Upload Your File </label>
+                <input type="file" name = "file" class="form-control">
+              </div> 
+              <button class="btn btn-primary" type="submit" style="color: white; background-color: green;"onclick="loading();">
+                Analyse!
+            </button>
+          </form>   
+          
+	</div>
+{% endif %}
+{% if loading %}
+
+{% endif %}
+
+<div class="container text-center" id="loading" hidden="True">
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+          <span class="sr-only">100% Complete</span>
+        </div>
+    </div>
+    <h3 class="text-center">We are currently analysing your video. This might Take a while</h3>
+</div>
+
+{% if analysis_done == True %}    
+    <div class="row">
+        <h3 class="text-center">Analysis Done you can search for items in the video now</h3>
+    </div>
+    <div class="row">
+        <form method="POST" action="http://localhost:5000/search" >
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for..." id="search" name="search">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit" onclick="showImage();">Search!</button>
+                </span>
+                </div><!-- /input-group -->
+        </form>
+       
+    
+    </div><!-- /.row -->
+
+   
+
+{% endif %}
+
+{% if showImages %}
+
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Images Matching Search</h3>
+        </div>
+        <div class="panel-body">
+            <div class="column" id="images">
+                <div class="container">
+                    {% for image in images %}
+                        <img class="img-fluid" height="480", width="480" alt="Responsive image" src="../{{url_for('static', filename=image)}}" />
+                        <p>{{image}}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+      </div>
+</div>
+
+
+{% endif %}
+</div>
+{% endblock %}
+
+{% block script%}
+
+{% endblock %}
